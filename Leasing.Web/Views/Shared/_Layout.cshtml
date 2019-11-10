@@ -36,6 +36,7 @@
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Manager"))
                     {
                         <li><a asp-area="" asp-controller="Owners" asp-action="Index">Owners</a></li>
+                        <li><a asp-area="" asp-controller="PropertyTypes" asp-action="Index">Property Type</a></li>
                     }
 
                 </ul>
