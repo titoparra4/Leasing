@@ -186,25 +186,28 @@ namespace Leasing.Web.Controllers
             }
 
             var owner = await _datacontext.Owners
+                .Include(o => o.User)
+                .Include(o => o.Properties)
+                .Include(o => o.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (owner == null)
             {
                 return NotFound();
             }
 
-            return View(owner);
-        }
+            if(owner.Properties.Count != 0)
+            {
+                ModelState.AddModelError(string.Empty, "Owner can´t be delete because it has properties");
+                return RedirectToAction(nameof(Index)); 
+            }
 
-        // POST: Owners/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var owner = await _datacontext.Owners.FindAsync(id);
             _datacontext.Owners.Remove(owner);
             await _datacontext.SaveChangesAsync();
+            await _userHelper.DeleteUserAsync(owner.User.Email);
             return RedirectToAction(nameof(Index));
+
         }
+
 
         private bool OwnerExists(int id)
         {
@@ -427,6 +430,46 @@ namespace Leasing.Web.Controllers
             }
 
             return View(model);
+        }
+
+        public async Task<IActionResult> DeleteImage(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var propertyImage = await _datacontext.PropertyImages
+                .Include(pi => pi.Property)
+                .FirstOrDefaultAsync(pi => pi.Id == id.Value);
+            if (propertyImage == null)
+            {
+                return NotFound();
+            }
+
+            _datacontext.PropertyImages.Remove(propertyImage);
+            await _datacontext.SaveChangesAsync();
+            return RedirectToAction($"{nameof(DetailsProperty)}/{propertyImage.Property.Id}");
+        }
+
+        public async Task<IActionResult> DeleteContract(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var contract = await _datacontext.Contracts
+                .Include(c => c.Property)
+                .FirstOrDefaultAsync(c => c.Id == id.Value);
+            if (contract == null)
+            {
+                return NotFound();
+            }
+
+            _datacontext.Contracts.Remove(contract);
+            await _datacontext.SaveChangesAsync();
+            return RedirectToAction($"{nameof(DetailsProperty)}/{contract.Property.Id}");
         }
 
 
