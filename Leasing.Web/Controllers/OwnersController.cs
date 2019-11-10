@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Leasing.Web.Data;
 using Leasing.Web.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Leasing.Web.Controllers
 {
+    [Authorize(Roles ="Manager")]
     public class OwnersController : Controller
     {
         private readonly DataContext _context;
