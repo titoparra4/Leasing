@@ -18,12 +18,18 @@ namespace Leasing.Web.Controllers
     {
         private readonly DataContext _datacontext;
         private readonly IUserHelper _userHelper;
+        private readonly ICombosHelper _combosHelper;
+        private readonly IConverterHelper _converterHelper;
 
         public OwnersController(DataContext datacontext,
-            IUserHelper userHelper)
+            IUserHelper userHelper,
+            ICombosHelper combosHelper,
+            IConverterHelper converterHelper)
         {
             _datacontext = datacontext;
             _userHelper = userHelper;
+            _combosHelper = combosHelper;
+            _converterHelper = converterHelper;
         }
 
         // GET: Owners
@@ -201,5 +207,43 @@ namespace Leasing.Web.Controllers
         {
             return _datacontext.Owners.Any(e => e.Id == id);
         }
+
+        public async Task<IActionResult> AddProperty(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var owner = await _datacontext.Owners.FindAsync(id);
+            if (owner == null)
+            {
+                return NotFound();
+            }
+
+            var model = new PropertyViewModel
+            {
+                OwnerId = owner.Id,
+                PropertyTypes = _combosHelper.GetComboPropertyTypes() 
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddProperty(PropertyViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var property = await _converterHelper.ToPropertyAsync(model, true);
+                _datacontext.Properties.Add(property);
+                await _datacontext.SaveChangesAsync();
+                return RedirectToAction($"Details/{model.OwnerId}");
+            }
+
+            return View(model);
+        }
+
+
     }
 }
