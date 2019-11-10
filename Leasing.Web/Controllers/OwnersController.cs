@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Leasing.Web.Data;
 using Leasing.Web.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Leasing.Web.Models;
+using Leasing.Web.Helpers;
 
 namespace Leasing.Web.Controllers
 {
@@ -15,10 +17,13 @@ namespace Leasing.Web.Controllers
     public class OwnersController : Controller
     {
         private readonly DataContext _datacontext;
+        private readonly IUserHelper _userHelper;
 
-        public OwnersController(DataContext datacontext)
+        public OwnersController(DataContext datacontext,
+            IUserHelper userHelper)
         {
             _datacontext = datacontext;
+            _userHelper = userHelper;
         }
 
         // GET: Owners
@@ -65,15 +70,51 @@ namespace Leasing.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id")] Owner owner)
+        public async Task<IActionResult> Create(AddUserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _datacontext.Add(owner);
-                await _datacontext.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var user = await CreateUserAsync(model);
+                if(user != null)
+                {
+                    var owner = new Owner
+                    {
+                        Contracts = new List<Contract>(),
+                        Properties = new List<Property>(),
+                        User = user,
+                    };
+
+                    _datacontext.Owners.Add(owner);
+                    await _datacontext.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+
+                ModelState.AddModelError(string.Empty, "User with this email alredy exists.");
             }
-            return View(owner);
+            return View(model);
+        }
+
+        private async Task<User> CreateUserAsync(AddUserViewModel model)
+        {
+            var user = new User
+            {
+                Address = model.Address,
+                Document = model.Document,
+                 Email = model.Username,
+                 FirstName = model.FirstName,
+                  LastName = model.LastName,
+                  PhoneNumber = model.PhoneNumber,
+                  UserName = model.Username
+            };
+
+            var result = await _userHelper.AddUserAsync(user, model.Password);
+            if(result.Succeeded)
+            {
+                user = await _userHelper.GetUserByEmailAsync(model.Username);
+                await _userHelper.AddUserToRoleAsync(user, "Owner");
+                return user;
+            }
+            return null;
         }
 
         // GET: Owners/Edit/5
