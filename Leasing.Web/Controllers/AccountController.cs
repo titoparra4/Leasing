@@ -9,6 +9,9 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System;
+using Leasing.Web.Data;
+using Leasing.Web.Data.Entities;
+using System.Collections.Generic;
 
 namespace Leasing.Web.Controllers
 {
@@ -16,12 +19,18 @@ namespace Leasing.Web.Controllers
     {
         private readonly IUserHelper _userHelper;
         private readonly IConfiguration _configuration;
+        private readonly ICombosHelper _combosHelper;
+        private readonly DataContext _dataContext;
 
         public AccountController(IUserHelper userHelper,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ICombosHelper combosHelper,
+            DataContext dataContext)
         {
             _userHelper = userHelper;
             _configuration = configuration;
+            _combosHelper = combosHelper;
+            _dataContext = dataContext;
         }
 
         public IActionResult Login()
@@ -108,6 +117,80 @@ namespace Leasing.Web.Controllers
             return View();
         }
 
+        public IActionResult Register()
+        {
+            var model = new AddUserViewModel
+            {
+                Roles = _combosHelper.GetComboRoles()
+            };
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(AddUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var role = "Owner";
+                if (model.RoleId == 1)
+                {
+                    role = "Lessee";
+                }
+
+                var user = await _userHelper.AddUser(model, role);
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "This email is already used.");
+                    return View(model);
+                }
+
+                if (model.RoleId == 1)
+                {
+                    var lessee = new Lessee
+                    {
+                        Contracts = new List<Contract>(),
+                        User = user
+                    };
+
+                    _dataContext.Lessees.Add(lessee);
+                    
+                }
+                else
+                {
+                    var owner = new Owner
+                    {
+                        Contracts = new List<Contract>(),
+                        Properties = new List<Property>(),
+                        User = user
+                    };
+
+                    _dataContext.Owners.Add(owner);
+                    
+                }
+
+                await _dataContext.SaveChangesAsync();
+
+                var loginViewModel = new LoginViewModel
+                {
+                    Password = model.Password,
+                    RememberMe = false,
+                    Username = model.Username
+                };
+
+                var result2 = await _userHelper.LoginAsync(loginViewModel);
+
+                if (result2.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+
+            model.Roles = _combosHelper.GetComboRoles();
+            return View(model);
+        }
 
     }
 }

@@ -30,5 +30,7 @@ namespace Leasing.Web.Helpers
 
         Task<SignInResult> ValidatePasswordAsync(User user, string password);
 
+        Task<User> AddUser(AddUserViewModel view, string role);
+
     }
 }
