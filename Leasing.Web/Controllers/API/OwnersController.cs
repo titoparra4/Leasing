@@ -5,11 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using Leasing.Common.Models;
 using Leasing.Web.Data;
 using Leasing.Web.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Leasing.Web.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class OwnersController : ControllerBase
     {
         private readonly DataContext _dataContext;
