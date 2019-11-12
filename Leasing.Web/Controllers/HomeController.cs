@@ -316,5 +316,44 @@ namespace Leasing.Web.Controllers
             return RedirectToAction(nameof(MyProperties));
         }
 
+        [Authorize(Roles = "Owner, Lessee")]
+        public IActionResult MyContracts()
+        {
+            return View(_dataContext.Contracts
+                .Include(c => c.Owner)
+                .ThenInclude(o => o.User)
+                .Include(c => c.Lessee)
+                .ThenInclude(l => l.User)
+                .Include(c => c.Property)
+                .ThenInclude(p => p.PropertyType)
+                .Where(c => c.Owner.User.UserName.ToLower().Equals(User.Identity.Name.ToLower()) ||
+                            c.Lessee.User.UserName.ToLower().Equals(User.Identity.Name.ToLower())));
+        }
+
+        [Authorize(Roles = "Owner, Lessee")]
+        public async Task<IActionResult> DetailsContract(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var contract = await _dataContext.Contracts
+                .Include(c => c.Owner)
+                .ThenInclude(o => o.User)
+                .Include(c => c.Lessee)
+                .ThenInclude(l => l.User)
+                .Include(c => c.Property)
+                .ThenInclude(p => p.PropertyType)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (contract == null)
+            {
+                return NotFound();
+            }
+
+            return View(contract);
+        }
+
+
     }
 }
