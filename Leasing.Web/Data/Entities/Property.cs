@@ -53,5 +53,18 @@ namespace Leasing.Web.Data.Entities
 
         public ICollection<Contract> Contracts { get; set; }
 
+        public string FirstImage
+        {
+            get
+            {
+                if (PropertyImages == null || PropertyImages.Count == 0)
+                {
+                    return "~/images/Properties/noAvaliable.jpg";
+                }
+
+                return PropertyImages.FirstOrDefault().ImageUrl;
+            }
+        }
+
     }
 }

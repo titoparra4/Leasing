@@ -1,0 +1,99 @@
+﻿@model IEnumerable<Leasing.Web.Data.Entities.Property>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<br />
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Properties</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                Image
+                            </th>
+                            <th>
+                                Property Type
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Neighborhood)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Address)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Price)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.SquareMeters)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Rooms)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.HasParkingLot)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.FirstImage))
+                                    {
+                                        <img src="@Url.Content(item.FirstImage)" alt="Image" style="width:300px;height:300px;max-width: 100%; height: auto;" />
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PropertyType.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Neighborhood)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Address)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Price)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SquareMeters)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Rooms)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.HasParkingLot)
+                                </td>
+                                <td>
+                                    <a asp-action="DetailsProperty" class="btn btn-default" asp-route-id="@item.Id"><i class="glyphicon glyphicon-list"> </i> </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+    	$(document).ready(function () {
+        	$('#MyTable').DataTable();
+    	});
+    </script>
+}
