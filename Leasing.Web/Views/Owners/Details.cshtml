@@ -6,10 +6,10 @@
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 
-<h2>Owner</h2>
+<h2 class="text-center">Owner Details</h2>
 
 <div>
-    <h4>Details</h4>
+    
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -129,8 +129,8 @@ else
                                         @Html.DisplayFor(modelItem => item.Contracts.Count)
                                     </td>
                                     <td>
-                                        <a asp-action="EditProperty" class="btn btn-default" asp-route-id="@item.Id"><i class="glyphicon glyphicon-pencil"></i> </a>
-                                        <a asp-action="DetailsProperty" class="btn btn-default" asp-route-id="@item.Id"><i class="glyphicon glyphicon-list"> </i> </a>
+                                        <a asp-action="EditProperty" class="btn btn-warning" asp-route-id="@item.Id"><i class="glyphicon glyphicon-pencil"></i> </a>
+                                        <a asp-action="DetailsProperty" class="btn btn-info" asp-route-id="@item.Id"><i class="glyphicon glyphicon-list"> </i> </a>
                                         <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
                                     </td>
                                 </tr>

@@ -34,9 +34,12 @@
 </div>
 
 <hr />
-<div class="row">
+<div class="text-center">
+    <h2>Find properties for sales</h2>
+</div>
+<div class="row text-center">
     <div class="col-md-2">
-        <a asp-action="SearchProperties" class="btn btn-primary">Search Properties</a>
+        <a asp-action="SearchProperties" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i> Search Properties</a>
     </div>
     @if (User.IsInRole("Owner") || User.IsInRole("Lessee"))
     {
@@ -51,4 +54,34 @@
         </div>
     }
 </div>
+<br />
+<br />
+<div class="row text-center">
+    <div class="col-md-4">
+        <img class="card-img-top" src="~/images/l4.jpg" alt="Card image">
+        <div class="card-body">
+            <h4 class="card-title"><b>Manage your leasing company</b></h4>
+            <p class="card-text">You can create users, properties, contracts and many more options to have total control of your business.</p>
+            <a href="#" class="btn btn-primary">See more...</a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <img class="card-img-top" src="~/images/l5.jpg" alt="Card image">
+        <div class="card-body">
+            <h4 class="card-title"><b>Manage your leased properties</b></h4>
+            <p class="card-text">With this application, you can manage the properties you have for rent and their respective contracts.</p>
+            <a href="#" class="btn btn-primary">See more...</a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <img class="card-img-top" src="~/images/l6.jpg" alt="Card image">
+        <div class="card-body">
+            <h4 class="card-title"><b>Manage your lease</b></h4>
+            <p class="card-text">If you are a lessee of a property, you can access this application to see the clauses of your contract.</p>
+            <a href="#" class="btn btn-primary">See more...</a>
+        </div>
+    </div>
+</div>
+<br />
+<br />
 

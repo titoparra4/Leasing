@@ -4,6 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
+<h2 class="text-center">Contract</h2>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 <br />
 
@@ -79,7 +80,7 @@
                                     @Html.DisplayFor(modelItem => item.IsActive)
                                 </td>
                                 <td>
-                                    <a asp-action="DetailsContract" class="btn btn-default" asp-route-id="@item.Id"><i class="glyphicon glyphicon-list"> </i> </a>
+                                    <a asp-action="DetailsContract" class="btn btn-info" asp-route-id="@item.Id"><i class="glyphicon glyphicon-list"> </i> </a>
                                 </td>
                             </tr>
                         }

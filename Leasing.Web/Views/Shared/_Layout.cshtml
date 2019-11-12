@@ -3,17 +3,19 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Leasing.Web</title>
+    <title>@ViewData["Title"] - Leasing</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <script src="https://kit.fontawesome.com/64b8953913.js" crossorigin="anonymous"></script>
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />        
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        
     </environment>
 </head>
 <body>
@@ -30,13 +32,13 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Manager"))
                     {
-                        <li><a asp-area="" asp-controller="Owners" asp-action="Index">Owners</a></li>
                         <li><a asp-area="" asp-controller="Managers" asp-action="Index">Managers</a></li>
+                        <li><a asp-area="" asp-controller="Owners" asp-action="Index">Owners</a></li>
                         <li><a asp-area="" asp-controller="PropertyTypes" asp-action="Index">Property Type</a></li>
                     }
 
@@ -61,10 +63,13 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; 2019 - Leasing By Tito</p>
-        </footer>
     </div>
+
+    <footer class="footer">
+        <div class="cont">
+            <p>&copy; 2019 - Leasing By <a href="https://www.titoparra.com">Tito Parra</a></p>
+        </div>
+    </footer>
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>

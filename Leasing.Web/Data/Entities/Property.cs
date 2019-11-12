@@ -29,7 +29,7 @@ namespace Leasing.Web.Data.Entities
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public int SquareMeters { get; set; }
 
-        [Display(Name = "Square meters")]
+        [Display(Name = "Rooms")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public int Rooms { get; set; }
 
