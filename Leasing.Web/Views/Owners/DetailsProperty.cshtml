@@ -4,6 +4,8 @@
     ViewData["Title"] = "Details";
 }
 
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+
 <h2>Property</h2>
 <div class="row">
     <div class="col-md-6">
@@ -107,109 +109,132 @@
     <a asp-action="AddContract" asp-route-id="@Model.Id" class="btn btn-default">Add Contract</a>
     <a asp-action="Details" asp-route-id="@Model.Owner.Id" class="btn btn-success">Back to Owner</a>
 </div>
+<hr />
 <div class="row">
     <div class="col-md-3">
         <div>
-            <h4>Images</h4>
+            
             @if (Model.PropertyImages.Count == 0)
             {
                 <h5>Not images added yet.</h5>
             }
             else
             {
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.PropertyImages.FirstOrDefault().ImageUrl)
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.PropertyImages)
-                        {
-                            <tr>
-                                <td>
-                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
-                                    {
-                                        <img src="@Url.Content(item.ImageUrl)" alt="Image" style="width:200px;height:200px;max-width: 100%; height: auto;" />
-                                    }
-                                </td>
-                                <td>
-                                    <button data-id="@item.Id" class="btn btn-danger deleteImage" data-toggle="modal" data-target="#deleteDialog">Delete</button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Images</h3>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-hover table-responsive table-striped" id="MyTableImages">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.PropertyImages.FirstOrDefault().ImageUrl)
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.PropertyImages)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                                    {
+                                                        <img src="@Url.Content(item.ImageUrl)" alt="Image" style="width:200px;height:200px;max-width: 100%; height: auto;" />
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <button data-id="@item.Id" class="btn btn-danger deleteImage" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
         </div>
     </div>
     <div class="col-md-9">
         <div>
-            <h4>Contracts</h4>
+            
             @if (Model.Contracts.Count == 0)
             {
                 <h5>Not contracts added yet.</h5>
             }
             else
             {
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>
-                                Lessee
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Contracts.FirstOrDefault().Remarks)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Contracts.FirstOrDefault().Price)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Contracts.FirstOrDefault().StartDate)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Contracts.FirstOrDefault().EndDate)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Contracts.FirstOrDefault().IsActive)
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.Contracts)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Lessee.User.FullNameWithDocument)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Remarks)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Price)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.StartDateLocal)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.EndDateLocal)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.IsActive)
-                                </td>
-                                <td>
-                                    <a asp-action="EditContract" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
-                                    <a asp-action="DetailsContract" asp-route-id="@item.Id" class="btn btn-info">Details</a>
-                                    <button data-id="@item.Id" class="btn btn-danger deleteContract" data-toggle="modal" data-target="#deleteDialog">Delete</button>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Contracts</h3>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-hover table-responsive table-striped" id="MyTableImages">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                Lessee
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Contracts.FirstOrDefault().Remarks)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Contracts.FirstOrDefault().Price)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Contracts.FirstOrDefault().StartDate)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Contracts.FirstOrDefault().EndDate)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Contracts.FirstOrDefault().IsActive)
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Contracts)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Lessee.User.FullNameWithDocument)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Remarks)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Price)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.StartDateLocal)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.EndDateLocal)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.IsActive)
+                                                </td>
+                                                <td>
+                                                    <a asp-action="EditContract" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                    <a asp-action="DetailsContract" asp-route-id="@item.Id" class="btn btn-info"><i class="glyphicon glyphicon-list"> </i></a>
+                                                    <button data-id="@item.Id" class="btn btn-danger deleteContract" data-toggle="modal" data-target="#deleteDialog"><i class="glyphicon glyphicon-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
         </div>
     </div>
@@ -220,30 +245,33 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
-    	$(document).ready(function () {
-        	// Delete item
-        	var item_to_delete;
-        	var action_to_delete;
+        $(document).ready(function () {
+            $('#MyTableImages').DataTable();
+            $('#MyTable').DataTable();
+            // Delete item
+            var item_to_delete;
+            var action_to_delete;
 
-        	$('.deleteImage').click((e) => {
-            	item_to_delete = e.currentTarget.dataset.id;
-            	action_to_delete = 1;
-        	});
+            $('.deleteImage').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+                action_to_delete = 1;
+            });
 
-        	$('.deleteContract').click((e) => {
-            	item_to_delete = e.currentTarget.dataset.id;
-            	action_to_delete = 2;
-        	});
+            $('.deleteContract').click((e) => {
+                item_to_delete = e.currentTarget.dataset.id;
+                action_to_delete = 2;
+            });
 
-        	$("#btnYesDelete").click(function () {
-            	if (action_to_delete == 1) {
-                	window.location.href = '/Owners/DeleteImage/' + item_to_delete;
-            	} else {
-                	window.location.href = '/Owners/DeleteContract/' + item_to_delete;
-            	}
-        	});
-    	});
+            $("#btnYesDelete").click(function () {
+                if (action_to_delete == 1) {
+                    window.location.href = '/Owners/DeleteImage/' + item_to_delete;
+                } else {
+                    window.location.href = '/Owners/DeleteContract/' + item_to_delete;
+                }
+            });
+        });
     </script>
 }
